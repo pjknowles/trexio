@@ -105,7 +105,12 @@ set(TREXIO_MOD_FILE ${PROJECT_SOURCE_DIR}/include/trexio_f.f90)
 # Export to parent scope so tests directory picks this up.
 set(TREXIO_MOD_FILE ${TREXIO_MOD_FILE} PARENT_SCOPE)
 # Add TREXIO Fortran module as a library.
-add_library(trexio_f SHARED)
+if (BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
+    add_library(trexio_f SHARED)
+else ()
+    add_library(trexio_f STATIC)
+    set_property(TARGET trexio_f PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif ()
 target_sources(trexio_f PUBLIC ${TREXIO_MOD_FILE})
 target_link_libraries(trexio_f PUBLIC trexio)
 
